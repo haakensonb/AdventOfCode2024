@@ -12,7 +12,7 @@ public class Day1Test
         Day1 day1 = new Day1();
         var answer = day1.SolvePart1(Input1);
         var expected = "11";
-        Assert.Equal(answer, expected);
+        Assert.Equal(expected, answer);
     }
 
     [Fact]
@@ -21,6 +21,6 @@ public class Day1Test
         Day1 day1 = new Day1();
         var answer = day1.SolvePart2(Input1);
         var expected = "31";
-        Assert.Equal(answer, expected);
+        Assert.Equal(expected, answer);
     }
 }
