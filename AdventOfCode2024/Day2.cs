@@ -6,6 +6,11 @@ public class Report
 {
     private List<int> levels;
 
+    public Report(List<int> levels)
+    {
+        this.levels = levels;
+    }
+
     public Report(string input)
     {
         this.levels = input.Split(" ").Select(int.Parse).ToList();
@@ -28,6 +33,26 @@ public class Report
         var withinDiffRange = adjacentDifferences.All(d => Math.Abs(d) > 0 && Math.Abs(d) <= 3);
         return (allPositive || allNegative) && withinDiffRange;
     }
+
+    public bool IsSafeWithProblemDampener()
+    {
+        var allPossibleReports = new List<Report>();
+        // Generate all possible reports with one level removed
+        for (var i = 0; i < levels.Count; i++)
+        {
+            var newLevels = new List<int>();
+            for (var j = 0; j < levels.Count; j++)
+            {
+                if (j != i)
+                {
+                    newLevels.Add(levels[j]);
+                }
+            }
+            allPossibleReports.Add(new Report(newLevels));
+        }
+        var hasSafePossibleReport = allPossibleReports.Any(r => r.IsSafe());
+        return hasSafePossibleReport;
+    }
 }
 
 public class Day2 : IDay
@@ -41,6 +66,8 @@ public class Day2 : IDay
 
     public string SolvePart2(string input)
     {
-        return "";
+        var reportsInputLines = input.Split("\n");
+        var reports = reportsInputLines.Select(line => new Report(line)).ToList();
+        return reports.Select(report => report.IsSafeWithProblemDampener()).Count(isSafe => isSafe == true).ToString();
     }
 }
