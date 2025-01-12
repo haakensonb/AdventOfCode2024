@@ -9,18 +9,10 @@ public class Day2Test
     [Fact]
     public void TestPart1()
     {
-        Day2 day2 = new Day2();
+        var day2 = new Day2();
         var answer = day2.SolvePart1(Input1);
         var expected = "2";
         Assert.Equal(expected, answer);
     }
 
-    // [Fact]
-    // public void TestPart2()
-    // {
-    //     Day2 day2 = new Day2();
-    //     var answer = day2.SolvePart2(Input1);
-    //     var expected = "";
-        // Assert.Equal(expected, answer);
-    // }
 }

@@ -37,7 +37,6 @@ class Program
                 Console.WriteLine($"\nPart 2: {dayObj.SolvePart2(dataInput)}");
                 sw.Stop();
                 Console.WriteLine($"Elapsed time: {sw.ElapsedMilliseconds} ms");
-                Console.WriteLine("----------------------");
             }
         }
     }
