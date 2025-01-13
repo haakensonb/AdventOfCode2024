@@ -2,29 +2,13 @@ using System.Text.RegularExpressions;
 
 namespace AdventOfCode2024;
 
-public enum InstructionType
-{
-    Multiply,
-    Unknown
-}
-
 public record Instruction
 {
     private int X;
     private int Y;
-    private InstructionType Type;
 
     public Instruction(string instruction)
     {
-        if (instruction.StartsWith("mul"))
-        {
-            this.Type = InstructionType.Multiply;
-        }
-        else
-        {
-            this.Type = InstructionType.Unknown;
-        }
-
         var regex = new Regex(@"\d+");
         var matches = regex.Matches(instruction);
         this.X = int.Parse(matches[0].Value);
@@ -33,11 +17,7 @@ public record Instruction
 
     public int Calculate()
     {
-        return this.Type switch
-        {
-            InstructionType.Multiply => this.X * this.Y,
-            InstructionType.Unknown => 0,
-        };
+        return this.X * this.Y;
     }
 }
 
@@ -51,6 +31,14 @@ public class Day3 : IDay
         return instructions.Select(x => x.Calculate()).Sum();
     }
 
+    private string RemoveDisabledInstructions(string line)
+    {
+        // Need Singleline so that "." will match newlines, "don't()" needs to keep matching onto the newline
+        var regex = new Regex(@"don\'t\(\).*?do\(\)|don\'t\(\).+$", RegexOptions.Singleline);
+        var result = regex.Replace(line, string.Empty);
+        return result;
+    }
+
     public string SolvePart1(string input)
     {
         var lines = input.Split("\n").ToList();
@@ -59,6 +47,7 @@ public class Day3 : IDay
 
     public string SolvePart2(string input)
     {
-        return "";
+        var line = RemoveDisabledInstructions(input);
+        return line.Split("\n").Select(SumInputLine).Sum().ToString();
     }
 }
