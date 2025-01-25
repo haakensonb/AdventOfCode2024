@@ -5,7 +5,7 @@ namespace AdventOfCode2024;
 class Program
 {
     private static readonly OrderedDictionary<string, string> DaysMapping = new OrderedDictionary<string, string>
-        { { "1", "Day1" }, { "2", "Day2" }, { "3", "Day3" } };
+        { { "1", "Day1" }, { "2", "Day2" }, { "3", "Day3" }, {"4", "Day4"}};
 
     private static readonly string Namespace = "AdventOfCode2024";
 
