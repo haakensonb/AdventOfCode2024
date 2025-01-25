@@ -1,94 +1,119 @@
 namespace AdventOfCode2024;
 
-public class Day4 : IDay
+public record Coord
 {
-    private string GetIfInBounds(List<List<string>> puzzle, int i, int j)
-    {
-        if ((i >= 0 && j >= 0) && (i < puzzle.Count && j < puzzle[i].Count))
-        {
-            return puzzle[i][j];
-        }
+    public int X { get; set; }
+    public int Y { get; set; }
 
-        return "";
+    public Coord(int x, int y)
+    {
+        X = x;
+        Y = y;
     }
+}
 
-    private List<string> GetAdjacentStrings(List<List<string>> puzzle)
+public class Puzzle
+{
+    private List<List<string>> _puzzle;
+
+    public Puzzle(string input)
     {
-        var adjacentStrings = new List<string>();
-
-        for (int i = 0; i < puzzle.Count; i++)
-        {
-            for (int j = 0; j < puzzle[i].Count; j++)
-            {
-                if (puzzle[i][j] == "X")
-                {
-                    // Messy and gross
-                    // Up
-                    var up = new List<string> { puzzle[i][j] };
-                    up.Add(GetIfInBounds(puzzle, i - 1, j));
-                    up.Add(GetIfInBounds(puzzle, i - 2, j));
-                    up.Add(GetIfInBounds(puzzle, i - 3, j));
-                    adjacentStrings.Add(string.Join("", up));
-                    // Down
-                    var down = new List<string> { puzzle[i][j] };
-                    down.Add(GetIfInBounds(puzzle, i + 1, j));
-                    down.Add(GetIfInBounds(puzzle, i + 2, j));
-                    down.Add(GetIfInBounds(puzzle, i + 3, j));
-                    adjacentStrings.Add(string.Join("", down));
-                    // Left
-                    var left = new List<string> { puzzle[i][j] };
-                    left.Add(GetIfInBounds(puzzle, i, j - 1));
-                    left.Add(GetIfInBounds(puzzle, i, j - 2));
-                    left.Add(GetIfInBounds(puzzle, i, j - 3));
-                    adjacentStrings.Add(string.Join("", left));
-                    // Right
-                    var right = new List<string> { puzzle[i][j] };
-                    right.Add(GetIfInBounds(puzzle, i, j + 1));
-                    right.Add(GetIfInBounds(puzzle, i, j + 2));
-                    right.Add(GetIfInBounds(puzzle, i, j + 3));
-                    adjacentStrings.Add(string.Join("", right));
-                    // Diagonal Up Right
-                    var diagUpRight = new List<string> { puzzle[i][j] };
-                    diagUpRight.Add(GetIfInBounds(puzzle, i - 1, j + 1));
-                    diagUpRight.Add(GetIfInBounds(puzzle, i - 2, j + 2));
-                    diagUpRight.Add(GetIfInBounds(puzzle, i - 3, j + 3));
-                    adjacentStrings.Add(string.Join("", diagUpRight));
-                    // Diagonal Down Right
-                    var diagDownRight = new List<string> { puzzle[i][j] };
-                    diagDownRight.Add(GetIfInBounds(puzzle, i + 1, j + 1));
-                    diagDownRight.Add(GetIfInBounds(puzzle, i + 2, j + 2));
-                    diagDownRight.Add(GetIfInBounds(puzzle, i + 3, j + 3));
-                    adjacentStrings.Add(string.Join("", diagDownRight));
-                    // Diagonal Up Left
-                    var diagUpLeft = new List<string> { puzzle[i][j] };
-                    diagUpLeft.Add(GetIfInBounds(puzzle, i - 1, j - 1));
-                    diagUpLeft.Add(GetIfInBounds(puzzle, i - 2, j - 2));
-                    diagUpLeft.Add(GetIfInBounds(puzzle, i - 3, j - 3));
-                    adjacentStrings.Add(string.Join("", diagUpLeft));
-                    // Diagonal Down Left
-                    var diagDownLeft = new List<string> { puzzle[i][j] };
-                    diagDownLeft.Add(GetIfInBounds(puzzle, i + 1, j - 1));
-                    diagDownLeft.Add(GetIfInBounds(puzzle, i + 2, j - 2));
-                    diagDownLeft.Add(GetIfInBounds(puzzle, i + 3, j - 3));
-                    adjacentStrings.Add(string.Join("", diagDownLeft));
-                }
-            }
-        }
-
-        return adjacentStrings;
-    }
-
-    public string SolvePart1(string input)
-    {
-        List<List<string>> puzzle = new List<List<string>>();
+        _puzzle = new List<List<string>>();
         var lines = input.Split("\n").ToList();
         foreach (var line in lines)
         {
             var splitLine = line.Select(c => c.ToString()).ToList();
-            puzzle.Add(splitLine);
+            _puzzle.Add(splitLine);
         }
+    }
 
-        var adjacentStrings = GetAdjacentStrings(puzzle);
+    private bool IsInBounds(int i, int j)
+    {
+        return ((i >= 0 && j >= 0) && (i < _puzzle.Count && j < _puzzle[i].Count));
+    }
+
+    private List<List<Coord>> GetAdjacentCoordGroups(int x, int y, int totalDistance)
+    {
+        var coords = new List<List<Coord>>();
+        var up = new List<Coord>();
+        var down = new List<Coord>();
+        var left = new List<Coord>();
+        var right = new List<Coord>();
+        var diagUpRight = new List<Coord>();
+        var diagDownRight = new List<Coord>();
+        var diagUpLeft = new List<Coord>();
+        var diagDownLeft = new List<Coord>();
+        for (int i = 0; i < totalDistance; i++)
+        {
+            // Up
+            if (IsInBounds(x - i, y))
+                up.Add(new Coord(x - i, y));
+            // Down
+            if (IsInBounds(x + i, y))
+                down.Add(new Coord(x + i, y));
+            // Left
+            if (IsInBounds(x, y - i))
+                left.Add(new Coord(x, y - i));
+            // Right
+            if (IsInBounds(x, y + i))
+                right.Add(new Coord(x, y + i));
+            // Diagonal Up Right
+            if (IsInBounds(x - i, y + i))
+                diagUpRight.Add(new Coord(x - i, y + i));
+            // Diagonal Down Right
+            if (IsInBounds(x + i, y + i)) 
+                diagDownRight.Add(new Coord(x + i, y + i));
+            // Diagonal Up Left
+            if (IsInBounds(x - i, y - i))
+                diagUpLeft.Add(new Coord(x - i, y - i));
+            // Diagonal Down Left
+            if (IsInBounds(x + i, y - i))
+                diagDownLeft.Add(new Coord(x + i, y - i));
+        }
+        coords.Add(up);
+        coords.Add(down);
+        coords.Add(left);
+        coords.Add(right);
+        coords.Add(diagUpRight);
+        coords.Add(diagDownRight);
+        coords.Add(diagUpLeft);
+        coords.Add(diagDownLeft);
+
+        return coords;
+    }
+    
+    public List<string> GetAdjacentStrings(string targetLetter, int totalDistance)
+        {
+            var adjacentStrings = new List<string>();
+    
+            for (int i = 0; i < _puzzle.Count; i++)
+            {
+                for (int j = 0; j < _puzzle[i].Count; j++)
+                {
+                    if (_puzzle[i][j] == targetLetter)
+                    {
+                        var adjacentCoordGroups = GetAdjacentCoordGroups(i, j, totalDistance);
+                        foreach (var group in adjacentCoordGroups)
+                        {
+                            var groupStr = string.Join("", group.Select(c => _puzzle[c.X][c.Y]).ToArray());
+                            adjacentStrings.Add(groupStr);
+                        }
+                    }
+                }
+            }
+    
+            return adjacentStrings;
+        }
+}
+
+public class Day4 : IDay
+{
+    
+
+    public string SolvePart1(string input)
+    {
+        var puzzle = new Puzzle(input);
+        var adjacentStrings = puzzle.GetAdjacentStrings("X", 4);
         var matches = adjacentStrings.Count(s => s == "XMAS" || s == "SAMX");
         return matches.ToString();
     }
