@@ -61,7 +61,7 @@ public class Puzzle
             if (IsInBounds(x - i, y + i))
                 diagUpRight.Add(new Coord(x - i, y + i));
             // Diagonal Down Right
-            if (IsInBounds(x + i, y + i)) 
+            if (IsInBounds(x + i, y + i))
                 diagDownRight.Add(new Coord(x + i, y + i));
             // Diagonal Up Left
             if (IsInBounds(x - i, y - i))
@@ -70,6 +70,7 @@ public class Puzzle
             if (IsInBounds(x + i, y - i))
                 diagDownLeft.Add(new Coord(x + i, y - i));
         }
+
         coords.Add(up);
         coords.Add(down);
         coords.Add(left);
@@ -81,45 +82,88 @@ public class Puzzle
 
         return coords;
     }
-    
-    public List<string> GetAdjacentStrings(string targetLetter, int totalDistance)
+
+    private List<List<Coord>> GetXCoordGroups(int x, int y)
+    {
+        var coords = new List<List<Coord>>();
+        var group = new List<Coord>();
+        group.Add(new Coord(x, y));
+        // Diagonal Up Right
+        if (IsInBounds(x - 1, y + 1))
+            group.Add(new Coord(x - 1, y + 1));
+        // Diagonal Down Right
+        if (IsInBounds(x + 1, y + 1))
+            group.Add(new Coord(x + 1, y + 1));
+        // Diagonal Up Left
+        if (IsInBounds(x - 1, y - 1))
+            group.Add(new Coord(x - 1, y - 1));
+        // Diagonal Down Left
+        if (IsInBounds(x + 1, y - 1))
+            group.Add(new Coord(x + 1, y - 1));
+
+        coords.Add(group);
+
+        return coords;
+    }
+
+    public List<string> GetAdjacentStrings(string targetLetter, int totalDistance, bool part2Flag)
+    {
+        var adjacentStrings = new List<string>();
+
+        for (int i = 0; i < _puzzle.Count; i++)
         {
-            var adjacentStrings = new List<string>();
-    
-            for (int i = 0; i < _puzzle.Count; i++)
+            for (int j = 0; j < _puzzle[i].Count; j++)
             {
-                for (int j = 0; j < _puzzle[i].Count; j++)
+                if (_puzzle[i][j] == targetLetter)
                 {
-                    if (_puzzle[i][j] == targetLetter)
+                    List<List<Coord>> adjacentCoordGroups;
+                    if (part2Flag)
                     {
-                        var adjacentCoordGroups = GetAdjacentCoordGroups(i, j, totalDistance);
-                        foreach (var group in adjacentCoordGroups)
-                        {
-                            var groupStr = string.Join("", group.Select(c => _puzzle[c.X][c.Y]).ToArray());
-                            adjacentStrings.Add(groupStr);
-                        }
+                        adjacentCoordGroups = GetXCoordGroups(i, j);
+                    }
+                    else
+                    {
+                        adjacentCoordGroups = GetAdjacentCoordGroups(i, j, totalDistance);
+                    }
+
+                    foreach (var group in adjacentCoordGroups)
+                    {
+                        var groupStr = string.Join("", group.Select(c => _puzzle[c.X][c.Y]).ToArray());
+                        adjacentStrings.Add(groupStr);
                     }
                 }
             }
-    
-            return adjacentStrings;
         }
+
+        return adjacentStrings;
+    }
+
+    public bool IsValidXString(string val)
+    {
+        return (
+            val == "ASSMM" ||
+            val == "AMSMS" ||
+            val == "ASMSM" ||
+            val == "AMMSS"
+        );
+    }
 }
 
 public class Day4 : IDay
 {
-    
-
     public string SolvePart1(string input)
     {
         var puzzle = new Puzzle(input);
-        var adjacentStrings = puzzle.GetAdjacentStrings("X", 4);
+        var adjacentStrings = puzzle.GetAdjacentStrings("X", 4, false);
         var matches = adjacentStrings.Count(s => s == "XMAS" || s == "SAMX");
         return matches.ToString();
     }
 
     public string SolvePart2(string input)
     {
-        return "";
+        var puzzle = new Puzzle(input);
+        var adjacentStrings = puzzle.GetAdjacentStrings("A", 1, true);
+        var matches = adjacentStrings.Count(puzzle.IsValidXString);
+        return matches.ToString();
     }
 }
