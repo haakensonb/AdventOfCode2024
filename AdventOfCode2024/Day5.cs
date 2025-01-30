@@ -80,9 +80,44 @@ public class Puzzle5
         return true;
     }
 
+    public UpdateLine GetFixedUpdate(UpdateLine updateLine)
+    {
+        var newUpdateLine = new UpdateLine { Nums = updateLine.Nums };
+        // Probably a better way to do this
+        while (!IsValidUpdate(newUpdateLine))
+        {
+            for (int i = 0; i < newUpdateLine.Nums.Count; i++)
+            {
+                var num = newUpdateLine.Nums[i];
+                if (_rules.ContainsKey(num))
+                {
+                    var set = _rules[num];
+                    foreach (var set_val in set)
+                    {
+                        var beforeIdx = newUpdateLine.Nums.IndexOf(set_val);
+                        if (beforeIdx > -1 && beforeIdx < i)
+                        {
+                            // Swap
+                            var temp = newUpdateLine.Nums[beforeIdx];
+                            newUpdateLine.Nums[beforeIdx] = newUpdateLine.Nums[i];
+                            newUpdateLine.Nums[i] = temp;
+                        }
+                    }
+                }
+            }
+        }
+
+        return newUpdateLine;
+    }
+
     public List<UpdateLine> GetValidUpdates()
     {
         return _updateLines.Where(IsValidUpdate).ToList();
+    }
+
+    public List<UpdateLine> GetInvalidUpdates()
+    {
+        return _updateLines.Where(u => !IsValidUpdate(u)).ToList();
     }
 }
 
@@ -97,6 +132,15 @@ public class Day5 : IDay
 
     public string SolvePart2(string input)
     {
-        return "";
+        var puzzle = new Puzzle5(input);
+        var invalidUpdates = puzzle.GetInvalidUpdates();
+        var fixedUpdates = new List<UpdateLine>();
+        foreach (var u in invalidUpdates)
+        {
+            var fixedUpdate = puzzle.GetFixedUpdate(u);
+            fixedUpdates.Add(fixedUpdate);
+        }
+
+        return fixedUpdates.Select(u => u.GetMiddleNum()).Sum().ToString();
     }
 }
