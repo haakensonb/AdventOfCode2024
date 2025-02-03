@@ -15,4 +15,13 @@ public class Day6Test
         var expected = "41";
         Assert.Equal(expected, answer);
     }
+
+    [Fact]
+    public void TestPart2()
+    {
+        var day6 = new Day6();
+        var answer = day6.SolvePart2(Input1);
+        var expected = "6";
+        Assert.Equal(expected, answer);
+    }
 }
