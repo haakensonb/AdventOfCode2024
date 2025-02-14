@@ -15,4 +15,22 @@ public class Day7Test
         var expected = "3749";
         Assert.Equal(expected, answer);
     }
+
+    [Fact]
+    public void TestPart2()
+    {
+        var day7 = new Day7();
+        var answer = day7.SolvePart2(Input1);
+        var expected = "11387";
+        Assert.Equal(expected, answer);
+    }
+
+    [Fact]
+    public void TestEdgeCase()
+    {
+        var day7 = new Day7();
+        var answer = day7.SolvePart2("100: 50 50 2");
+        var expected = "0";
+        Assert.Equal(expected, answer);
+    }
 }
