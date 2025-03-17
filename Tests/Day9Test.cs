@@ -16,6 +16,15 @@ public class Day9Test
     }
 
     [Fact]
+    public void TestPart2()
+    {
+        var day9 = new Day9();
+        var answer = day9.SolvePart2(Input1);
+        var expected = "2858";
+        Assert.Equal(expected, answer);
+    }
+
+    [Fact]
     public void TestEdgeCase1()
     {
         var day9 = new Day9();
