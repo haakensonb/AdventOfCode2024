@@ -1,6 +1,6 @@
-﻿using System.Diagnostics;
+﻿namespace AdventOfCode2024;
 
-namespace AdventOfCode2024;
+using System.Diagnostics;
 
 class Program
 {
@@ -12,13 +12,14 @@ class Program
 
     private static readonly string BaseNamespace = "AdventOfCode2024";
 
-    static void Main(string[] args)
+    public static void Main(string[] args)
     {
-        Console.WriteLine("Advent of Code 2024\n");
+        Console.WriteLine("Advent of Code 2024");
+        var outputLines = new List<OutputLine>();
+        
         foreach (var day in DaysMapping)
         {
-            Console.WriteLine("----------------------");
-            Console.WriteLine($"Day {day.Key}");
+            Console.WriteLine($"Running Day {day.Key}...");
             var dayNamespace = $"{BaseNamespace}.{day.Value}";
             var dayClassname = $"{dayNamespace}.{day.Value}";
             Type? t = Type.GetType(dayClassname);
@@ -34,15 +35,32 @@ class Program
 
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
-                Console.WriteLine($"\nPart 1: {dayObj.SolvePart1(dataInput)}");
+                var part1 = dayObj.SolvePart1(dataInput);
                 sw.Stop();
-                Console.WriteLine($"Elapsed time: {sw.ElapsedMilliseconds} ms");
+                var part1ms = sw.ElapsedMilliseconds;
 
                 sw.Restart();
-                Console.WriteLine($"\nPart 2: {dayObj.SolvePart2(dataInput)}");
+                var part2 = dayObj.SolvePart2(dataInput);
                 sw.Stop();
-                Console.WriteLine($"Elapsed time: {sw.ElapsedMilliseconds} ms");
+                var part2ms = sw.ElapsedMilliseconds;
+                
+                outputLines.Add(new OutputLine(day.Key, part1, part1ms, part2, part2ms));
             }
+        }
+
+        WriteOutputLines(outputLines);
+        
+    }
+
+    private static void WriteOutputLines(List<OutputLine> outputLines)
+    {
+        Console.WriteLine(OutputLine.BarLine());
+        Console.WriteLine(OutputLine.Header());
+        Console.WriteLine(OutputLine.BarLine());
+        foreach (var line in outputLines)
+        {
+            Console.WriteLine(line.ToString());
+            Console.WriteLine(OutputLine.BarLine());
         }
     }
 }
