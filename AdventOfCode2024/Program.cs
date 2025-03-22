@@ -12,44 +12,39 @@ class Program
 
     private static readonly string BaseNamespace = "AdventOfCode2024";
 
-    public static void Main(string[] args)
+    private static void RunDay(string dayKey, List<OutputLine> outputLines)
     {
-        Console.WriteLine("Advent of Code 2024");
-        var outputLines = new List<OutputLine>();
-        
-        foreach (var day in DaysMapping)
+        if (DaysMapping.ContainsKey(dayKey))
         {
-            Console.WriteLine($"Running Day {day.Key}...");
-            var dayNamespace = $"{BaseNamespace}.{day.Value}";
-            var dayClassname = $"{dayNamespace}.{day.Value}";
+            var dayVal = DaysMapping[dayKey];
+            Console.WriteLine($"Running Day {dayKey}...");
+            var dayNamespace = $"{BaseNamespace}.{dayVal}";
+            var dayClassname = $"{dayNamespace}.{dayVal}";
             Type? t = Type.GetType(dayClassname);
             if (t == null)
             {
-                Console.WriteLine($"Day {day.Key} has not been registered.");
+                Console.WriteLine($"Day {dayKey} has not been registered.");
             }
             else
             {
-                var path = Path.Combine(Environment.CurrentDirectory, @"Data/", $"input_{day.Key}.txt");
+                var path = Path.Combine(Environment.CurrentDirectory, @"Data/", $"input_{dayKey}.txt");
                 var dataInput = File.ReadAllText(path);
                 IDay? dayObj = (IDay)Activator.CreateInstance(t)!;
-
+     
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
                 var part1 = dayObj.SolvePart1(dataInput);
                 sw.Stop();
                 var part1ms = sw.ElapsedMilliseconds;
-
+     
                 sw.Restart();
                 var part2 = dayObj.SolvePart2(dataInput);
                 sw.Stop();
                 var part2ms = sw.ElapsedMilliseconds;
                 
-                outputLines.Add(new OutputLine(day.Key, part1, part1ms, part2, part2ms));
+                outputLines.Add(new OutputLine(dayKey, part1, part1ms, part2, part2ms));
             }
         }
-
-        WriteOutputLines(outputLines);
-        
     }
 
     private static void WriteOutputLines(List<OutputLine> outputLines)
@@ -62,5 +57,21 @@ class Program
             Console.WriteLine(line.ToString());
             Console.WriteLine(OutputLine.BarLine());
         }
+    }
+
+    private static void RunAllDays()
+    {
+         var outputLines = new List<OutputLine>();
+         foreach (var day in DaysMapping)
+         {
+             RunDay(day.Key, outputLines);
+         }
+         WriteOutputLines(outputLines);       
+    }
+    
+    public static void Main(string[] args)
+    {
+        Console.WriteLine("Advent of Code 2024");
+        RunAllDays();
     }
 }
