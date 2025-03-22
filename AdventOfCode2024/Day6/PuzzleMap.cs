@@ -1,49 +1,4 @@
-using System.Text;
-
-namespace AdventOfCode2024;
-
-public enum Direction
-{
-    North = '^',
-    South = 'v',
-    East = '>',
-    West = '<'
-}
-
-public class Guard(int x, int y, Direction direction = Direction.North)
-{
-    public int X { get; set; } = x;
-    public int Y { get; set; } = y;
-
-    public Direction CurrentDirection { get; set; } = direction;
-
-    public void Rotate()
-    {
-        CurrentDirection = CurrentDirection switch
-        {
-            Direction.North => Direction.East,
-            Direction.South => Direction.West,
-            Direction.East => Direction.South,
-            Direction.West => Direction.North,
-            _ => CurrentDirection
-        };
-    }
-
-    public override int GetHashCode()
-    {
-        return HashCode.Combine(X, Y, CurrentDirection);
-    }
-
-    public override bool Equals(object obj)
-    {
-        return obj is Guard && Equals((Guard)obj);
-    }
-
-    public bool Equals(Guard other)
-    {
-        return X == other.X && Y == other.Y && CurrentDirection == other.CurrentDirection;
-    }
-}
+﻿namespace AdventOfCode2024.Day6;
 
 public class PuzzleMap
 {
@@ -197,54 +152,5 @@ public class PuzzleMap
 
         var guardStart = FindGuardLocation();
         _guard = new Guard(guardStart.x, guardStart.y);
-    }
-}
-
-public class Day6 : IDay
-{
-    public string SolvePart1(string input)
-    {
-        var puzzleMap = new PuzzleMap(input);
-        puzzleMap.PatrolSimulation();
-        return puzzleMap.CountXs().ToString();
-    }
-
-    private List<PuzzleMap> GeneratePossiblePuzzleMapsWithObstructions(string initialInput)
-    {
-        var possiblePuzzleMaps = new List<PuzzleMap>();
-        List<string> possibleInputs = [];
-        var sb = new StringBuilder(initialInput);
-        for (int i = 0; i < sb.Length; i++)
-        {
-            if (sb[i] == '.')
-            {
-                sb[i] = '#';
-                possibleInputs.Add(sb.ToString());
-                // Change back
-                sb[i] = '.';
-            }
-        }
-
-        foreach (var input in possibleInputs)
-        {
-            possiblePuzzleMaps.Add(new PuzzleMap(input));
-        }
-
-        return possiblePuzzleMaps;
-    }
-
-    public string SolvePart2(string input)
-    {
-        // Brute force
-        var possiblePuzzleMaps = GeneratePossiblePuzzleMapsWithObstructions(input);
-        var obstructedCount = 0;
-        foreach (var puzzleMap in possiblePuzzleMaps)
-        {
-            var isObstructed = puzzleMap.IsMapObstructedSimulation();
-            if (isObstructed)
-                obstructedCount += 1;
-        }
-
-        return obstructedCount.ToString();
     }
 }

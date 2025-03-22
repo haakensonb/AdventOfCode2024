@@ -10,7 +10,7 @@ class Program
         { "7", "Day7" }, { "8", "Day8" }, { "9", "Day9" }, { "10", "Day10" }
     };
 
-    private static readonly string Namespace = "AdventOfCode2024";
+    private static readonly string BaseNamespace = "AdventOfCode2024";
 
     static void Main(string[] args)
     {
@@ -19,7 +19,9 @@ class Program
         {
             Console.WriteLine("----------------------");
             Console.WriteLine($"Day {day.Key}");
-            Type? t = Type.GetType(Namespace + "." + day.Value);
+            var dayNamespace = $"{BaseNamespace}.{day.Value}";
+            var dayClassname = $"{dayNamespace}.{day.Value}";
+            Type? t = Type.GetType(dayClassname);
             if (t == null)
             {
                 Console.WriteLine($"Day {day.Key} has not been registered.");

@@ -1,17 +1,6 @@
-namespace AdventOfCode2024;
+﻿namespace AdventOfCode2024.Day5;
 
-public record UpdateLine
-{
-    public required List<int> Nums { get; init; }
-
-    public int GetMiddleNum()
-    {
-        var index = Nums.Count / 2;
-        return Nums[index];
-    }
-}
-
-public class Puzzle5
+public class Puzzle
 {
     private Dictionary<int, HashSet<int>> _rules;
     private List<UpdateLine> _updateLines;
@@ -52,7 +41,7 @@ public class Puzzle5
         return result;
     }
 
-    public Puzzle5(string input)
+    public Puzzle(string input)
     {
         var splitInput = input.Split("\n\n");
         _rules = ParseRules(splitInput[0]);
@@ -118,29 +107,5 @@ public class Puzzle5
     public List<UpdateLine> GetInvalidUpdates()
     {
         return _updateLines.Where(u => !IsValidUpdate(u)).ToList();
-    }
-}
-
-public class Day5 : IDay
-{
-    public string SolvePart1(string input)
-    {
-        var puzzle = new Puzzle5(input);
-        var validUpdates = puzzle.GetValidUpdates();
-        return validUpdates.Select(u => u.GetMiddleNum()).Sum().ToString();
-    }
-
-    public string SolvePart2(string input)
-    {
-        var puzzle = new Puzzle5(input);
-        var invalidUpdates = puzzle.GetInvalidUpdates();
-        var fixedUpdates = new List<UpdateLine>();
-        foreach (var u in invalidUpdates)
-        {
-            var fixedUpdate = puzzle.GetFixedUpdate(u);
-            fixedUpdates.Add(fixedUpdate);
-        }
-
-        return fixedUpdates.Select(u => u.GetMiddleNum()).Sum().ToString();
     }
 }

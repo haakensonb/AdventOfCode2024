@@ -1,10 +1,10 @@
-namespace AdventOfCode2024;
+﻿namespace AdventOfCode2024.Day9;
 
-public class Puzzle9
+public class Puzzle
 {
     private List<string> _expandedDiskMap;
 
-    public Puzzle9(string diskMapInput)
+    public Puzzle(string diskMapInput)
     {
         _expandedDiskMap = ExpandDiskMap(diskMapInput);
     }
@@ -172,22 +172,5 @@ public class Puzzle9
         }
 
         return result;
-    }
-}
-
-public class Day9 : IDay
-{
-    public string SolvePart1(string input)
-    {
-        var puzzle = new Puzzle9(input);
-        puzzle.MoveFileBlocks();
-        return puzzle.Checksum().ToString();
-    }
-
-    public string SolvePart2(string input)
-    {
-        var puzzle = new Puzzle9(input);
-        puzzle.MoveFileBlocksWithoutFrag();
-        return puzzle.Checksum().ToString();
     }
 }

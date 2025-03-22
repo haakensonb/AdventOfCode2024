@@ -1,9 +1,9 @@
-namespace AdventOfCode2024;
+﻿namespace AdventOfCode2024.Day1;
 
 public class ElfLocation
 {
-    private List<int> _leftColumn = new List<int>();
-    private List<int> _rightColumn = new List<int>();
+    private readonly List<int> _leftColumn = new List<int>();
+    private readonly List<int> _rightColumn = new List<int>();
 
     public ElfLocation(string input)
     {
@@ -49,22 +49,5 @@ public class ElfLocation
         }
 
         return similarityScores;
-    }
-}
-
-public class Day1 : IDay
-{
-    public string SolvePart1(string input)
-    {
-        var elfLocation = new ElfLocation(input);
-        var distances = elfLocation.GetDistances();
-        return distances.Sum().ToString();
-    }
-
-    public string SolvePart2(string input)
-    {
-        var elfLocation = new ElfLocation(input);
-        var similarityScores = elfLocation.GetSimilarityScores();
-        return similarityScores.Sum().ToString();
     }
 }

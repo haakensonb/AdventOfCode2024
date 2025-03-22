@@ -1,4 +1,4 @@
-﻿using AdventOfCode2024;
+﻿using AdventOfCode2024.Day1;
 
 namespace Tests;
 

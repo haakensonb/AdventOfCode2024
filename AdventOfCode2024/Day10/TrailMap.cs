@@ -1,13 +1,4 @@
-// TODO: fix namespace
-
-namespace AdventOfCode2024;
-
-public record PointDay10(int X, int Y)
-{
-    public override string ToString() => $"({X}, {Y})";
-}
-
-public record Node(Node? Previous, PointDay10 Point);
+﻿namespace AdventOfCode2024.Day10;
 
 public record TrailMap
 {
@@ -43,14 +34,14 @@ public record TrailMap
         return map;
     }
 
-    private bool IsWithin(PointDay10 p)
+    private bool IsWithin(Point p)
     {
         var xMax = _map.Count - 1;
         var yMax = _map[0].Count - 1;
         return (p.X >= 0 && p.X <= xMax && p.Y >= 0 && p.Y <= yMax);
     }
 
-    private bool IsValidPointDay10(PointDay10 p)
+    private bool IsValidPoint(Point p)
     {
         if (IsWithin(p))
         {
@@ -61,27 +52,27 @@ public record TrailMap
         return false;
     }
 
-    private List<PointDay10> GetValidNeighbors(PointDay10 p)
+    private List<Point> GetValidNeighbors(Point p)
     {
-        var neighbors = new List<PointDay10>();
-        var left = new PointDay10(p.X, p.Y - 1);
-        if (IsValidPointDay10(left))
+        var neighbors = new List<Point>();
+        var left = new Point(p.X, p.Y - 1);
+        if (IsValidPoint(left))
             neighbors.Add(left);
-        var right = new PointDay10(p.X, p.Y + 1);
-        if (IsValidPointDay10(right))
+        var right = new Point(p.X, p.Y + 1);
+        if (IsValidPoint(right))
             neighbors.Add(right);
-        var up = new PointDay10(p.X - 1, p.Y);
-        if (IsValidPointDay10(up))
+        var up = new Point(p.X - 1, p.Y);
+        if (IsValidPoint(up))
             neighbors.Add(up);
-        var down = new PointDay10(p.X + 1, p.Y);
-        if (IsValidPointDay10(down))
+        var down = new Point(p.X + 1, p.Y);
+        if (IsValidPoint(down))
             neighbors.Add(down);
         return neighbors;
     }
 
-    private List<PointDay10> GetTrailheads()
+    private List<Point> GetTrailheads()
     {
-        var trailheads = new List<PointDay10>();
+        var trailheads = new List<Point>();
         for (var i = 0; i < _map.Count; i++)
         {
             for (var j = 0; j < _map[i].Count; j++)
@@ -89,7 +80,7 @@ public record TrailMap
                 var val = _map[i][j];
                 if (val == 0)
                 {
-                    trailheads.Add(new PointDay10(i, j));
+                    trailheads.Add(new Point(i, j));
                 }
             }
         }
@@ -97,10 +88,10 @@ public record TrailMap
         return trailheads;
     }
 
-    private int GetTrailheadScore(PointDay10 p)
+    private int GetTrailheadScore(Point p)
     {
         var score = 0;
-        var visited = new HashSet<PointDay10>();
+        var visited = new HashSet<Point>();
 
         void Traversal(Node node)
         {
@@ -139,7 +130,7 @@ public record TrailMap
         return score;
     }
 
-    private int GetTrailheadRating(PointDay10 p)
+    private int GetTrailheadRating(Point p)
     {
         var visited = new HashSet<Node>();
         var rating = new HashSet<Node>();
@@ -185,20 +176,5 @@ public record TrailMap
     {
         var trailheads = GetTrailheads();
         return trailheads.Select(GetTrailheadRating).Sum();
-    }
-}
-
-public class Day10 : IDay
-{
-    public string SolvePart1(string input)
-    {
-        var trailMap = new TrailMap(input);
-        return trailMap.ScoreSum().ToString();
-    }
-
-    public string SolvePart2(string input)
-    {
-        var trailMap = new TrailMap(input);
-        return trailMap.RatingSum().ToString();
     }
 }
