@@ -25,4 +25,23 @@ public class Day10Test
         var expected = "3";
         Assert.Equal(expected, answer);
     }
+
+    [Fact]
+    public void TestPart2()
+    {
+        var day10 = new Day10();
+        var answer = day10.SolvePart2(Input1);
+        var expected = "81";
+        Assert.Equal(expected, answer);
+    }
+
+    [Fact]
+    public void TestSimpleExample2()
+    {
+        var input = ".....0.\n..4321.\n..5..2.\n..6543.\n..7..4.\n..8765.\n..9....";
+        var day10 = new Day10();
+        var answer = day10.SolvePart2(input);
+        var expected = "3";
+        Assert.Equal(expected, answer);
+    }
 }
