@@ -24,12 +24,13 @@ public class Guard(int x, int y, Direction direction = Direction.North)
         return HashCode.Combine(X, Y, CurrentDirection);
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
-        return obj is Guard && Equals((Guard)obj);
+        var guard = obj as Guard;
+        return guard != null && Equals(guard);
     }
 
-    public bool Equals(Guard other)
+    private bool Equals(Guard other)
     {
         return X == other.X && Y == other.Y && CurrentDirection == other.CurrentDirection;
     }
