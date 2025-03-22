@@ -59,19 +59,22 @@ class Program
         }
     }
 
-    private static void RunAllDays()
-    {
-         var outputLines = new List<OutputLine>();
-         foreach (var day in DaysMapping)
-         {
-             RunDay(day.Key, outputLines);
-         }
-         WriteOutputLines(outputLines);       
-    }
-    
     public static void Main(string[] args)
     {
         Console.WriteLine("Advent of Code 2024");
-        RunAllDays();
+        var outputLines = new List<OutputLine>();
+        if (args.Length == 0)
+        { 
+            foreach (var day in DaysMapping)
+            {
+                RunDay(day.Key, outputLines);
+            }
+        } else if (args.Length == 1)
+        {
+            var targetDay = args[0];
+            RunDay(targetDay, outputLines);
+        }
+        
+        WriteOutputLines(outputLines);
     }
 }
