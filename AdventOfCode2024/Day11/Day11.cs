@@ -1,12 +1,17 @@
 ﻿namespace AdventOfCode2024.Day11;
 
+public record Arg(long stone, int blinkLevel);
+
 public record Puzzle
 {
     private List<long> _stones;
 
+    private Dictionary<Arg, long> _cache;
+
     public Puzzle(string input)
     {
         _stones = input.Split(" ").Select(long.Parse).ToList();
+        _cache = new Dictionary<Arg, long>();
     }
 
     private (long left, long right) SplitStone(long stone)
@@ -17,7 +22,7 @@ public record Puzzle
         return (left, right);
     }
 
-    private void SingleBlink()
+    private long ExpandStone(long originalStone, int totalBlinks)
     {
         // If the stone is engraved with the number 0, it is replaced by a stone engraved with the number 1.
         
@@ -25,42 +30,49 @@ public record Puzzle
         
         // If none of the other rules apply, the stone is replaced by a new stone; the old stone's number multiplied by
         // 2024 is engraved on the new stone.
-        var stoneCount = _stones.Count;
-        for (var i = 0; i < stoneCount; i++)
+
+        long recurse(Arg arg)
         {
-            var stone = _stones[i];
-            if (stone == 0)
-            {
-                _stones[i] = 1;
-            } else if (stone.ToString().Length % 2 == 0)
-            {
-                var splitStones = SplitStone(stone);
-                _stones.Insert(i, splitStones.right);
-                _stones.Insert(i, splitStones.left);
-                // Need to adjust index/count to account for inserting/removing during loop
-                _stones.RemoveAt(i + 2);
-                stoneCount += 1;
-                i += 1;
+            // Memoization
+            if (_cache.TryGetValue(arg, out long val))
+                return val;
+
+            // Base case
+            if (arg.blinkLevel == 0)
+                return 1;
+
+            var lowerBlinkLevel = arg.blinkLevel - 1;
+
+            if (arg.stone == 0){
+                _cache[arg] = recurse(new Arg(1, lowerBlinkLevel));
+            } else if (arg.stone.ToString().Length % 2 == 0){
+                var (left, right) = SplitStone(arg.stone);
+                var leftArg = new Arg(left, lowerBlinkLevel);
+                var rightArg = new Arg(right, lowerBlinkLevel);
+                _cache[arg] = recurse(leftArg) + recurse(rightArg);
+            } else {
+                _cache[arg] = recurse(new Arg(arg.stone * 2024, lowerBlinkLevel));
             }
-            else
-            {
-                _stones[i] *= 2024;
-            }
+
+            return _cache[arg];
+            
         }
+
+        var count = recurse(new Arg(originalStone, totalBlinks));
+        
+        return count;
     }
 
-    public void Blink(int numOfBlinks)
+    public long Blink(int numOfBlinks)
     {
-        for (var i = 0; i < numOfBlinks; i++)
-        {
-            SingleBlink();
+        long totalCount = 0;
+        foreach(var stone in _stones){
+            var count = ExpandStone(stone, numOfBlinks);
+            totalCount += count;
         }
+        return totalCount;
     }
 
-    public long GetNumOfStones()
-    {
-        return _stones.Count;
-    }
 }
 
 public class Day11 : IDay
@@ -68,12 +80,14 @@ public class Day11 : IDay
     public string SolvePart1(string input)
     {
         var puzzle = new Puzzle(input);
-        puzzle.Blink(25);
-        return puzzle.GetNumOfStones().ToString();
+        var numOfStones = puzzle.Blink(25);
+        return numOfStones.ToString();
     }
 
     public string SolvePart2(string input)
     {
-        return "";
+        var puzzle = new Puzzle(input);
+        var numOfStones = puzzle.Blink(75);
+        return numOfStones.ToString();
     }
 }
