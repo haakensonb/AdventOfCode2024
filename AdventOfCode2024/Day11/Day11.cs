@@ -65,12 +65,7 @@ public record Puzzle
 
     public long Blink(int numOfBlinks)
     {
-        long totalCount = 0;
-        foreach(var stone in _stones){
-            var count = ExpandStone(stone, numOfBlinks);
-            totalCount += count;
-        }
-        return totalCount;
+        return _stones.Select(stone => ExpandStone(stone, numOfBlinks)).Sum();
     }
 
 }
