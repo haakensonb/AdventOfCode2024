@@ -8,41 +8,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Update="Data\input_1.txt">
+        <None Update="Data\*.txt">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="Data\input_2.txt">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="Data\input_3.txt">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="Data\input_4.txt">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="Data\input_5.txt">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="Data\input_6.txt">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="Data\input_7.txt">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="Data\input_8.txt">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="Data\input_9.txt">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="Data\input_10.txt">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="Data\input_11.txt">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="Data\input_12.txt">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
     </ItemGroup>
 
