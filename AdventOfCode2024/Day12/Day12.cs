@@ -11,6 +11,7 @@ public class Day12 : IDay
 
     public string SolvePart2(string input)
     {
-        return "";
+        var garden = new Garden(input);
+        return garden.GetRegions().Select(r => r.GetBulkPrice()).Sum().ToString();
     }
 }

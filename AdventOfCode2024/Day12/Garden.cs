@@ -26,9 +26,11 @@ public class Garden
         return (p.X >= 0 && p.X < _garden.Count) && (p.Y >= 0 && p.Y < _garden[0].Count);
     }
 
-    private List<Point> GetNeighbors(Point p)
+    private Dictionary<string, Point> GetNeighbors(Point p)
     {
-        var neighbors = new List<Point>();
+        var neighbors = new Dictionary<string, Point>();
+
+        List<string> directions = ["up", "down", "left", "right"];
 
         var directionModifiers = new List<Point>{
             new(-1, 0), // up
@@ -37,14 +39,60 @@ public class Garden
             new(0, 1) // right
         };
 
-        foreach (var direction in directionModifiers)
+        for (var i = 0; i < directions.Count; i++)
         {
-            var newPoint = p.Add(direction);
+            var newPoint = p.Add(directionModifiers[i]);
             if (IsInGarden(newPoint))
-                neighbors.Add(newPoint);
+                neighbors.Add(directions[i], newPoint);
         }
 
         return neighbors;
+    }
+
+    private int GetCorners(Point p, Dictionary<string, Point> neighbors)
+    {
+        int corners = 0;
+        var val = _garden[p.X][p.Y];
+
+        neighbors.TryGetValue("up", out Point? upP);
+        var up = upP != null ? _garden[upP.X][upP.Y] : '0';
+        neighbors.TryGetValue("down", out Point? downP);
+        var down = downP != null ? _garden[downP.X][downP.Y] : '0';
+        neighbors.TryGetValue("left", out Point? leftP);
+        var left = leftP != null ? _garden[leftP.X][leftP.Y] : '0';
+        neighbors.TryGetValue("right", out Point? rightP);
+        var right = rightP != null ? _garden[rightP.X][rightP.Y] : '0';
+
+        // Outer corners
+        if (up != val && left != val)
+            corners += 1;
+        if (up != val && right != val)
+            corners += 1;
+        if (down != val && left != val)
+            corners += 1;
+        if (down != val && right != val)
+            corners += 1;
+
+        Point upLeftDiagP = p.Add(new Point(-1, -1));
+        Point upRightDiagP = p.Add(new Point(-1, 1));
+        Point downLeftDiagP = p.Add(new Point(1, -1));
+        Point downRightDiagP = p.Add(new Point(1, 1));
+        var upLeftDiag = IsInGarden(upLeftDiagP) ? _garden[upLeftDiagP.X][upLeftDiagP.Y] : '0';
+        var upRightDiag = IsInGarden(upRightDiagP) ? _garden[upRightDiagP.X][upRightDiagP.Y] : '0';
+        var downLeftDiag = IsInGarden(downLeftDiagP) ? _garden[downLeftDiagP.X][downLeftDiagP.Y] : '0';
+        var downRightDiag = IsInGarden(downRightDiagP) ? _garden[downRightDiagP.X][downRightDiagP.Y] : '0';
+
+        // Inner corners
+        if (up == val && left == val && upLeftDiag != val)
+            corners += 1;
+        if (up == val && right == val && upRightDiag != val)
+            corners += 1;
+        if (down == val && left == val && downLeftDiag != val)
+            corners += 1;
+        if (down == val && right == val && downRightDiag != val)
+            corners += 1;
+
+        return corners;
     }
 
     private int GetPerimeter(char pointVal, List<Point> neighbors)
@@ -70,10 +118,18 @@ public class Garden
         {
             var point = queue.Dequeue();
             var pointVal = _garden[point.X][point.Y];
+
             var neighbors = GetNeighbors(point);
-            var perimeter = GetPerimeter(pointVal, neighbors);
+            var neighborsList = neighbors.Values.ToList();
+
+            var perimeter = GetPerimeter(pointVal, neighborsList);
+            var corners = GetCorners(point, neighbors);
+
             region.perimeter += perimeter;
-            foreach (var neighbor in neighbors)
+            // Number of corners is equal to the number of sides
+            region.sides += corners;
+
+            foreach (var neighbor in neighborsList)
             {
                 var neighborVal = _garden[neighbor.X][neighbor.Y];
                 if (!visited.Contains(neighbor) && (pointVal == neighborVal))
