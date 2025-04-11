@@ -7,7 +7,7 @@ class Program
     private static readonly OrderedDictionary<string, string> DaysMapping = new OrderedDictionary<string, string>
     {
         { "1", "Day1" }, { "2", "Day2" }, { "3", "Day3" }, { "4", "Day4" }, { "5", "Day5" }, { "6", "Day6" },
-        { "7", "Day7" }, { "8", "Day8" }, { "9", "Day9" }, { "10", "Day10" }, { "11", "Day11" }
+        { "7", "Day7" }, { "8", "Day8" }, { "9", "Day9" }, { "10", "Day10" }, { "11", "Day11" }, { "12", "Day12" }
     };
 
     private static readonly string BaseNamespace = "AdventOfCode2024";
@@ -30,18 +30,18 @@ class Program
                 var path = Path.Combine(Environment.CurrentDirectory, @"Data/", $"input_{dayKey}.txt");
                 var dataInput = File.ReadAllText(path);
                 IDay? dayObj = (IDay)Activator.CreateInstance(t)!;
-     
+
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
                 var part1 = dayObj.SolvePart1(dataInput);
                 sw.Stop();
                 var part1ms = sw.ElapsedMilliseconds;
-     
+
                 sw.Restart();
                 var part2 = dayObj.SolvePart2(dataInput);
                 sw.Stop();
                 var part2ms = sw.ElapsedMilliseconds;
-                
+
                 outputLines.Add(new OutputLine(dayKey, part1, part1ms, part2, part2ms));
             }
         }
@@ -64,17 +64,18 @@ class Program
         Console.WriteLine("Advent of Code 2024");
         var outputLines = new List<OutputLine>();
         if (args.Length == 0)
-        { 
+        {
             foreach (var day in DaysMapping)
             {
                 RunDay(day.Key, outputLines);
             }
-        } else if (args.Length == 1)
+        }
+        else if (args.Length == 1)
         {
             var targetDay = args[0];
             RunDay(targetDay, outputLines);
         }
-        
+
         WriteOutputLines(outputLines);
     }
 }
