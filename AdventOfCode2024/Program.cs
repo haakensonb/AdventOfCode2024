@@ -4,10 +4,24 @@ using System.Diagnostics;
 
 class Program
 {
-    private static readonly OrderedDictionary<string, string> DaysMapping = new OrderedDictionary<string, string>
+    private static readonly OrderedDictionary<string, string> DaysMapping = new OrderedDictionary<
+        string,
+        string
+    >
     {
-        { "1", "Day1" }, { "2", "Day2" }, { "3", "Day3" }, { "4", "Day4" }, { "5", "Day5" }, { "6", "Day6" },
-        { "7", "Day7" }, { "8", "Day8" }, { "9", "Day9" }, { "10", "Day10" }, { "11", "Day11" }, { "12", "Day12" }
+        { "1", "Day1" },
+        { "2", "Day2" },
+        { "3", "Day3" },
+        { "4", "Day4" },
+        { "5", "Day5" },
+        { "6", "Day6" },
+        { "7", "Day7" },
+        { "8", "Day8" },
+        { "9", "Day9" },
+        { "10", "Day10" },
+        { "11", "Day11" },
+        { "12", "Day12" },
+        { "13", "Day13" },
     };
 
     private static readonly string BaseNamespace = "AdventOfCode2024";
@@ -27,7 +41,11 @@ class Program
             }
             else
             {
-                var path = Path.Combine(Environment.CurrentDirectory, @"Data/", $"input_{dayKey}.txt");
+                var path = Path.Combine(
+                    Environment.CurrentDirectory,
+                    @"Data/",
+                    $"input_{dayKey}.txt"
+                );
                 var dataInput = File.ReadAllText(path);
                 IDay? dayObj = (IDay)Activator.CreateInstance(t)!;
 
@@ -79,3 +97,4 @@ class Program
         WriteOutputLines(outputLines);
     }
 }
+

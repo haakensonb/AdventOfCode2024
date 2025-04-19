@@ -4,9 +4,9 @@ namespace Tests;
 
 public class Day12Test
 {
-
     private readonly string Input1 = "AAAA\nBBCD\nBBCC\nEEEC";
-    private readonly string Input2 = "RRRRIICCFF\nRRRRIICCCF\nVVRRRCCFFF\nVVRCCCJFFF\nVVVVCJJCFE\nVVIVCCJJEE\nVVIIICJJEE\nMIIIIIJJEE\nMIIISIJEEE\nMMMISSJEEE";
+    private readonly string Input2 =
+        "RRRRIICCFF\nRRRRIICCCF\nVVRRRCCFFF\nVVRCCCJFFF\nVVVVCJJCFE\nVVIVCCJJEE\nVVIIICJJEE\nMIIIIIJJEE\nMIIISIJEEE\nMMMISSJEEE";
 
     [Fact]
     public void TestPart1Example1()
@@ -43,5 +43,5 @@ public class Day12Test
         var expected = "1206";
         Assert.Equal(expected, answer);
     }
-
 }
+
