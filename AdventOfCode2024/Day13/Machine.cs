@@ -24,32 +24,18 @@ public record Machine
         var _size = 100;
         _arr = new Point[_size, _size];
 
-        _arr[0, 0] = new Point(0, 0);
-        // Fill first row
-        for (var j = 1; j < _size; j++)
+        for (var i = 0; i < _size; i++)
         {
-            var newY = (Ay * j) + (By * j);
-            _arr[0, j] = new Point(0, newY);
-        }
-        // Fill first column
-        for (var i = 1; i < _size; i++)
-        {
-            var newX = (Ax * i) + (Bx * i);
-            _arr[i, 0] = new Point(newX, 0);
-        }
-        // Fill remaining
-        for (var i = 1; i < _size; i++)
-        {
-            for (var j = 1; j < _size; j++)
+            for (var j = 0; j < _size; j++)
             {
-                var x = _arr[i, j - 1].X;
-                var y = _arr[i - 1, j].Y;
+                var x = (Ax * i) + (Bx * j);
+                var y = (Ay * i) + (By * j);
                 _arr[i, j] = new Point(x, y);
             }
         }
     }
 
-    public (int NumButtonPressesA, int NumButtonPressesB)? TryGetNumButton()
+    public (int NumButtonPressesA, int NumButtonPressesB) TryGetNumButton()
     {
         for (var i = 1; i < _size; i++)
         {
@@ -59,7 +45,7 @@ public record Machine
                     return (i, j);
             }
         }
-        return null;
+        return (-1, -1);
     }
 
     private void InitVals(string input)
