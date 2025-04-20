@@ -48,7 +48,7 @@ Prize: X=18641, Y=10279";
     {
         var input = "Button A: X+94, Y+34\nButton B: X+22, Y+67\nPrize: X=8400, Y=5400";
         var machine = new Machine(input);
-        (int NumButtonPressesA, int NumButtonPressesB)? result = machine.TryGetNumButton();
+        (long NumButtonPressesA, long NumButtonPressesB) result = machine.TryGetNumButton(machine.PrizeX, machine.PrizeY);
         var expected = (80, 40);
         Assert.Equal(expected, result);
     }
