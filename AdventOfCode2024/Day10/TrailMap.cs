@@ -1,4 +1,6 @@
-﻿namespace AdventOfCode2024.Day10;
+﻿using AdventOfCode2024.Common.Point;
+
+namespace AdventOfCode2024.Day10;
 
 public record TrailMap
 {
@@ -101,10 +103,10 @@ public record TrailMap
             if (node.Previous != null)
             {
                 var prevVal = _map[node.Previous.Point.X][node.Previous.Point.Y];
-                if(currVal != prevVal + 1)
+                if (currVal != prevVal + 1)
                 {
                     return;
-                }    
+                }
             }
 
             visited.Add(node.Point);
@@ -145,7 +147,7 @@ public record TrailMap
             }
 
             visited.Add(node);
-            
+
             var neighbors = GetValidNeighbors(node.Point);
             foreach (var neighbor in neighbors)
             {
@@ -178,3 +180,4 @@ public record TrailMap
         return trailheads.Select(GetTrailheadRating).Sum();
     }
 }
+

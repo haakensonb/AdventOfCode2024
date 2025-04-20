@@ -1,3 +1,5 @@
+using AdventOfCode2024.Common.Point;
+
 namespace AdventOfCode2024.Day8;
 
 public class Day8 : IDay
@@ -18,7 +20,7 @@ public class Day8 : IDay
         }
         return antinodes;
     }
-    
+
     private HashSet<Point> FindAllAntiNodes(AntennaMap antennaMap, Point point1, Point point2)
     {
         var antinodes = new HashSet<Point>();
@@ -63,7 +65,7 @@ public class Day8 : IDay
         }
         return uniqueAntinodePoints.Count.ToString();
     }
-    
+
     public string SolvePart1(string input)
     {
         var antinodeFunc = FindAntiNodes;
@@ -76,3 +78,4 @@ public class Day8 : IDay
         return Solve(input, antinodeFunc);
     }
 }
+

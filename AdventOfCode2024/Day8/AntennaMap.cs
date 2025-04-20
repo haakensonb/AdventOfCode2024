@@ -1,4 +1,6 @@
-﻿namespace AdventOfCode2024.Day8;
+using AdventOfCode2024.Common.Point;
+
+namespace AdventOfCode2024.Day8;
 
 public record AntennaMap
 {
@@ -18,7 +20,7 @@ public record AntennaMap
     {
         var xMax = _map.Count - 1;
         var yMax = _map[0].Count - 1;
-        return (p.x >= 0 && p.x <= xMax && p.y >= 0 && p.y <= yMax);
+        return (p.X >= 0 && p.X <= xMax && p.Y >= 0 && p.Y <= yMax);
     }
 
     public Dictionary<char, List<Point>> GetFrequencyPoints()
@@ -39,7 +41,7 @@ public record AntennaMap
                     else
                     {
                         frequencyPoints.Add(currentChar, new List<Point> { currentPoint });
-                    }    
+                    }
                 }
             }
         }
