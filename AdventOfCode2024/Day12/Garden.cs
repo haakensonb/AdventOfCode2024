@@ -1,4 +1,4 @@
-using System.Runtime.InteropServices;
+using AdventOfCode2024.Common.Point;
 
 namespace AdventOfCode2024.Day12;
 
@@ -32,11 +32,12 @@ public class Garden
 
         List<string> directions = ["up", "down", "left", "right"];
 
-        var directionModifiers = new List<Point>{
+        var directionModifiers = new List<Point>
+        {
             new(-1, 0), // up
             new(1, 0), // down
             new(0, -1), // left
-            new(0, 1) // right
+            new(0, 1), // right
         };
 
         for (var i = 0; i < directions.Count; i++)
@@ -79,8 +80,12 @@ public class Garden
         Point downRightDiagP = p.Add(new Point(1, 1));
         var upLeftDiag = IsInGarden(upLeftDiagP) ? _garden[upLeftDiagP.X][upLeftDiagP.Y] : '0';
         var upRightDiag = IsInGarden(upRightDiagP) ? _garden[upRightDiagP.X][upRightDiagP.Y] : '0';
-        var downLeftDiag = IsInGarden(downLeftDiagP) ? _garden[downLeftDiagP.X][downLeftDiagP.Y] : '0';
-        var downRightDiag = IsInGarden(downRightDiagP) ? _garden[downRightDiagP.X][downRightDiagP.Y] : '0';
+        var downLeftDiag = IsInGarden(downLeftDiagP)
+            ? _garden[downLeftDiagP.X][downLeftDiagP.Y]
+            : '0';
+        var downRightDiag = IsInGarden(downRightDiagP)
+            ? _garden[downRightDiagP.X][downRightDiagP.Y]
+            : '0';
 
         // Inner corners
         if (up == val && left == val && upLeftDiag != val)
@@ -108,10 +113,7 @@ public class Garden
         var region = new Region();
 
         var queue = new Queue<Point>();
-        var visited = new HashSet<Point>
-        {
-            startingPoint
-        };
+        var visited = new HashSet<Point> { startingPoint };
         queue.Enqueue(startingPoint);
 
         while (queue.Count > 0)
@@ -173,3 +175,4 @@ public class Garden
         return _regions;
     }
 }
+

@@ -1,5 +1,5 @@
 using System.Text.RegularExpressions;
-using AdventOfCode2024.Common;
+using AdventOfCode2024.Common.Point;
 
 public record Machine
 {
@@ -16,13 +16,12 @@ public record Machine
     public Machine(string input)
     {
         InitVals(input);
-        CreateSolutionArr();
+        _arr = CreateSolutionArr();
     }
 
-    private void CreateSolutionArr()
+    private Point[,] CreateSolutionArr()
     {
-        var _size = 100;
-        _arr = new Point[_size, _size];
+        var arr = new Point[_size, _size];
 
         for (var i = 0; i < _size; i++)
         {
@@ -30,9 +29,10 @@ public record Machine
             {
                 var x = (Ax * i) + (Bx * j);
                 var y = (Ay * i) + (By * j);
-                _arr[i, j] = new Point(x, y);
+                arr[i, j] = new Point(x, y);
             }
         }
+        return arr;
     }
 
     public (int NumButtonPressesA, int NumButtonPressesB) TryGetNumButton()

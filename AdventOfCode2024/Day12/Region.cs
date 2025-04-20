@@ -1,3 +1,5 @@
+using AdventOfCode2024.Common.Point;
+
 namespace AdventOfCode2024.Day12;
 
 public record Region
@@ -23,3 +25,4 @@ public record Region
         return points.Count * sides;
     }
 }
+
